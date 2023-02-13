@@ -1,4 +1,4 @@
-use cargo_swift_package::{run, Cli};
+use cargo_swift_package::{run, SpmCli};
 use clap::Parser;
 use std::env;
 
@@ -14,7 +14,7 @@ fn main() {
         args.remove(1);
     }
 
-    let args = Cli::parse_from(&args);
+    let args = SpmCli::parse_from(&args);
     if let Err(e) = crate::run(args) {
         eprintln!("{:?}", e);
         std::process::exit(1);

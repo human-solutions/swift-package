@@ -1,10 +1,10 @@
 mod conf;
 
 use anyhow::Result;
-pub use conf::Cli;
 use conf::Configuration;
+pub use conf::SpmCli;
 
-pub fn run(cli: Cli) -> Result<()> {
+pub fn run(cli: SpmCli) -> Result<()> {
     let conf = Configuration::load(cli)?;
 
     if conf.build_dir.exists() {
@@ -12,5 +12,6 @@ pub fn run(cli: Cli) -> Result<()> {
     }
     fs_err::create_dir_all(&conf.build_dir)?;
 
+    cargo_xcframework::run(conf.cli.to_xc_cli())?;
     Ok(())
 }

@@ -1,10 +1,11 @@
 use camino::Utf8PathBuf;
+use cargo_xcframework::XcCli;
 use clap::Parser;
 
 /// Compile a package into a cross-platform Apple XCFramework
 #[derive(Debug, Parser)]
 #[clap(version)]
-pub struct Cli {
+pub struct SpmCli {
     /// Do not print cargo log messages
     #[arg(short, long)]
     pub quiet: bool,
@@ -44,4 +45,22 @@ pub struct Cli {
     /// Path to Cargo.toml.
     #[arg(long, value_name = "PATH")]
     pub manifest_path: Option<Utf8PathBuf>,
+}
+
+impl SpmCli {
+    pub fn to_xc_cli(&self) -> XcCli {
+        XcCli {
+            lib_type: None,
+            quiet: self.quiet,
+            package: self.package.clone(),
+            verbose: self.verbose,
+            release: self.release,
+            profile: self.profile.clone(),
+            features: self.features.clone(),
+            all_features: self.all_features,
+            no_default_features: self.no_default_features,
+            target_dir: self.target_dir.clone(),
+            manifest_path: self.manifest_path.clone(),
+        }
+    }
 }
