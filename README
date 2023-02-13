@@ -1,0 +1,3 @@
+# cargo swift-package
+
+This is a sub-command for Cargo that allows you to use Cargo to build Swift packages.
