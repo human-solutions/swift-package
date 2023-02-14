@@ -20,7 +20,9 @@ impl SwiftPackageConfiguration {
         }
     }
 
-    fn parse_xcframework(xcfr: &serde_json::Value, _dir: &Utf8Path) -> Result<Self> {
-        Ok(serde_json::from_value::<Self>(xcfr.clone())?)
+    fn parse_xcframework(xcfr: &serde_json::Value, dir: &Utf8Path) -> Result<Self> {
+        let mut me = serde_json::from_value::<Self>(xcfr.clone())?;
+        me.swift_source_dir = dir.join(me.swift_source_dir);
+        Ok(me)
     }
 }

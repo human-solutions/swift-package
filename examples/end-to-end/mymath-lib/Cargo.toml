@@ -16,4 +16,4 @@ macOS = true
 simulators = true
 
 [package.metadata.swift-package]
-swift-source-dir = "src/swift"
+swift-source-dir = "swift"

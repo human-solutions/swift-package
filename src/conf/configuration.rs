@@ -9,6 +9,7 @@ use cargo_xcframework::XCFrameworkConfiguration;
 pub struct Configuration {
     /// The root dir of the project
     pub dir: Utf8PathBuf,
+    pub name: String,
     pub cargo_section: SwiftPackageConfiguration,
     pub cli: SpmCli,
     pub xcframework: XCFrameworkConfiguration,
@@ -32,7 +33,7 @@ impl Configuration {
                 .clone()
                 .unwrap_or_else(|| Utf8PathBuf::from("target")),
         );
-        let build_dir = target_dir.join("xcframework");
+        let build_dir = target_dir.join("swift-package");
 
         let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
 
@@ -44,6 +45,7 @@ impl Configuration {
 
         Ok(Self {
             dir,
+            name: "SwiftMath".to_string(),
             cargo_section: sp_conf,
             xcframework: xc_conf,
             cli,

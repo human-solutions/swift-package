@@ -1,10 +1,10 @@
-import MyMath
+import SwiftMath
 
 @main
 public struct swift_cmd {
     public private(set) var text = "Hello, World!"
 
     public static func main() {
-        print("MyMath.rust_add(4 + 2) = \(MyMath.rust_add(4, 2))")
+        print("SwiftMath.swift_add(4 + 2) = \(SwiftMath.swift_add(4, 2))")
     }
 }

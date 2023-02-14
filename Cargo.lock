@@ -48,8 +48,10 @@ dependencies = [
  "cargo_metadata",
  "clap",
  "fs-err",
+ "fs_extra",
  "serde",
  "serde_json",
+ "tempfile",
  "yansi",
 ]
 
@@ -62,7 +64,6 @@ dependencies = [
  "cargo_metadata",
  "clap",
  "dialoguer",
- "dunce",
  "fs-err",
  "lazy_static",
  "rustup-target",
@@ -228,12 +229,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dunce"
-version = "1.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bd4b30a6560bbd9b4620f4de34c3f14f60848e58a9b7216801afcb4c7b31c3c"
-
-[[package]]
 name = "encode_unicode"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -280,6 +275,12 @@ name = "fs-err"
 version = "2.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0845fa252299212f0389d64ba26f34fa32cfe41588355f21ed507c59a0f64541"
+
+[[package]]
+name = "fs_extra"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
 
 [[package]]
 name = "heck"

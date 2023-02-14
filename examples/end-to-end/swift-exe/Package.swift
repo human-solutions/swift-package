@@ -1,20 +1,13 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.7.1
 import PackageDescription
 let package = Package(
 	name: "mymath",
 	products: [
-		.library(
-			name: "mymath",
-			targets: ["mymath"]),
 	],
-	dependencies: [],
+	dependencies: [.package(path: "../mymath-lib/target/swift-package")],
 	targets: [
 		.executableTarget(
 				name: "swift-cmd",
-				dependencies: ["mymath"]),
-		.binaryTarget(
-				name: "mymath",
-				path: "../mymath-lib/target/xcframework/mymath.xcframework"
-		),
+				dependencies: [.product(name: "SwiftMath", package: "swift-package")]),
 	]
 )
