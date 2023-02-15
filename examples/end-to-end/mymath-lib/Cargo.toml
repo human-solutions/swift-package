@@ -10,10 +10,8 @@ name = "mymath"
 crate-type = ["staticlib"]
 
 [package.metadata.xcframework]
-headers-dir = "include"
-iOS = true
+include-dir = "include"
 macOS = true
-simulators = true
 
 [package.metadata.swift-package]
 swift-source-dir = "swift"

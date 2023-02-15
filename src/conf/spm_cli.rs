@@ -18,6 +18,10 @@ pub struct SpmCli {
     #[arg(short, long, action = clap::ArgAction::Count)]
     pub verbose: u8,
 
+    /// Unstable (nightly-only) flags to Cargo, see 'cargo -Z help' for details
+    #[arg(short = 'Z', value_name = "FLAG")]
+    pub unstable_flags: Option<String>,
+
     /// Build artifacts in release mode, with optimizations
     #[arg(short, long)]
     pub release: bool,
@@ -54,6 +58,7 @@ impl SpmCli {
             quiet: self.quiet,
             package: self.package.clone(),
             verbose: self.verbose,
+            unstable_flags: self.unstable_flags.clone(),
             release: self.release,
             profile: self.profile.clone(),
             features: self.features.clone(),

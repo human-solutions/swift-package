@@ -1,9 +1,12 @@
 mod conf;
+mod ext;
 mod swift_package_file;
 
 use anyhow::{Context, Result};
+use cargo_xcframework::Produced;
 use conf::Configuration;
 pub use conf::SpmCli;
+use ext::PathBufExt;
 use fs_extra::dir::CopyOptions;
 
 pub fn run(cli: SpmCli) -> Result<()> {
@@ -13,14 +16,12 @@ pub fn run(cli: SpmCli) -> Result<()> {
         fs_err::remove_dir_all(&conf.build_dir)?;
     }
     fs_err::create_dir_all(&conf.build_dir)?;
-    if false {
-        cargo_xcframework::run(conf.cli.to_xc_cli())?;
-    }
+    let produced = cargo_xcframework::run(conf.cli.to_xc_cli())?;
 
-    swift_package_file::generate(&conf)?;
+    swift_package_file::generate(&conf, &produced)?;
     fs_err::create_dir_all(conf.build_dir.join("Sources").join("SwiftMath"))?;
 
-    copy_framework(&conf)?;
+    copy_framework(&conf, &produced)?;
     copy_swift_file(&conf)?;
     fs_err::copy(
         conf.dir.join("swift").join("SwiftMath.swift"),
@@ -43,20 +44,20 @@ fn copy_swift_file(conf: &Configuration) -> Result<()> {
     ))?;
     Ok(())
 }
-fn copy_framework(conf: &Configuration) -> Result<()> {
-    let from = conf
-        .target_dir
-        .join("xcframework")
-        .join("mymath.xcframework");
-    let to = &conf.build_dir;
+fn copy_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
+    conf.build_dir.create_dir_all_if_needed()?;
 
-    if !to.exists() {
-        fs_err::create_dir(&to)?;
+    if produced.is_zipped {
+        fs_err::copy(
+            &produced.path,
+            &conf.build_dir.join(produced.path.file_name().unwrap()),
+        )?;
+    } else {
+        let options = CopyOptions::new();
+        fs_extra::dir::copy(&produced.path, &conf.build_dir, &options).context(format!(
+            "Could not recursively copy the directory {} to {}",
+            &produced.path, &conf.build_dir
+        ))?;
     }
-
-    let options = CopyOptions::new();
-    fs_extra::dir::copy(&from, &to, &options).context(format!(
-        "Could not recursively copy the directory {from} to {to}"
-    ))?;
     Ok(())
 }
