@@ -5,6 +5,7 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug, Default)]
 #[serde(rename_all = "kebab-case")]
 pub struct SwiftPackageConfiguration {
+    pub package_name: String,
     pub swift_source_dir: Utf8PathBuf,
 }
 

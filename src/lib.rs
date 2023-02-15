@@ -12,21 +12,15 @@ use fs_extra::dir::CopyOptions;
 pub fn run(cli: SpmCli) -> Result<()> {
     let conf = Configuration::load(cli)?;
 
-    if conf.build_dir.exists() {
-        fs_err::remove_dir_all(&conf.build_dir)?;
-    }
+    conf.build_dir.remove_dir_all_if_exists()?;
     fs_err::create_dir_all(&conf.build_dir)?;
-    let produced = cargo_xcframework::run(conf.cli.to_xc_cli())?;
+
+    let produced = cargo_xcframework::build(conf.cli.to_xc_cli())?;
 
     swift_package_file::generate(&conf, &produced)?;
-    fs_err::create_dir_all(conf.build_dir.join("Sources").join("SwiftMath"))?;
 
-    copy_framework(&conf, &produced)?;
+    move_framework(&conf, &produced)?;
     copy_swift_file(&conf)?;
-    fs_err::copy(
-        conf.dir.join("swift").join("SwiftMath.swift"),
-        conf.build_dir.join("SwiftMath.swift"),
-    )?;
 
     Ok(())
 }
@@ -34,30 +28,20 @@ pub fn run(cli: SpmCli) -> Result<()> {
 fn copy_swift_file(conf: &Configuration) -> Result<()> {
     let from = &conf.cargo_section.swift_source_dir;
     let to = conf.build_dir.join("Sources").join("SwiftMath");
+    to.create_dir_all_if_needed()?;
 
-    if !to.exists() {
-        fs_err::create_dir(&to)?;
-    }
     let options = CopyOptions::new();
     fs_extra::dir::copy(&from, &to, &options).context(format!(
         "Could not recursively copy the directory {from} to {to}"
     ))?;
     Ok(())
 }
-fn copy_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
+fn move_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
     conf.build_dir.create_dir_all_if_needed()?;
 
-    if produced.is_zipped {
-        fs_err::copy(
-            &produced.path,
-            &conf.build_dir.join(produced.path.file_name().unwrap()),
-        )?;
-    } else {
-        let options = CopyOptions::new();
-        fs_extra::dir::copy(&produced.path, &conf.build_dir, &options).context(format!(
-            "Could not recursively copy the directory {} to {}",
-            &produced.path, &conf.build_dir
-        ))?;
-    }
+    fs_err::rename(
+        &produced.path,
+        &conf.build_dir.join(produced.path.file_name().unwrap()),
+    )?;
     Ok(())
 }

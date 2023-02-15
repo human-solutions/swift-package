@@ -33,7 +33,6 @@ impl Configuration {
                 .clone()
                 .unwrap_or_else(|| Utf8PathBuf::from("target")),
         );
-        let build_dir = target_dir.join("swift-package");
 
         let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
 
@@ -43,6 +42,7 @@ impl Configuration {
         let xc_conf = XCFrameworkConfiguration::parse(&package.metadata, &dir)?;
         let sp_conf = SwiftPackageConfiguration::parse(&package.metadata, &dir)?;
 
+        let build_dir = target_dir.join(format!("{}.package", sp_conf.package_name));
         Ok(Self {
             dir,
             name: "SwiftMath".to_string(),

@@ -4,10 +4,10 @@ let package = Package(
 	name: "mymath",
 	products: [
 	],
-	dependencies: [.package(path: "../mymath-lib/target/swift-package")],
+	dependencies: [.package(path: "../mymath-lib/target/SwiftMath.package")],
 	targets: [
 		.executableTarget(
 				name: "swift-cmd",
-				dependencies: [.product(name: "SwiftMath", package: "swift-package")]),
+				dependencies: [.product(name: "SwiftMath", package: "SwiftMath.package")]),
 	]
 )

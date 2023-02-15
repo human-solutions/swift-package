@@ -4,6 +4,8 @@ use cargo_xcframework::Produced;
 
 pub fn generate(conf: &Configuration, produced: &Produced) -> Result<()> {
     let module_name = &produced.module_name;
+    let package_name = &conf.cargo_section.package_name;
+
     let xcframework_ext = if produced.is_zipped {
         "xcframework.zip"
     } else {
@@ -14,11 +16,11 @@ pub fn generate(conf: &Configuration, produced: &Produced) -> Result<()> {
         r###"// swift-tools-version:5.7.1
 import PackageDescription
 let package = Package(
-  name: "SwiftMath",
+  name: "{package_name}",
   products: [
     .library(
-      name: "SwiftMath",
-      targets: ["SwiftMath"]),
+      name: "{package_name}",
+      targets: ["{package_name}"]),
   ],
   dependencies: [],
   targets: [
@@ -27,7 +29,7 @@ let package = Package(
       path: "{module_name}.{xcframework_ext}"
     ),
     .target(
-      name: "SwiftMath",
+      name: "{package_name}",
       dependencies: ["{module_name}"]
     )
   ]
