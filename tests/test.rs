@@ -1,10 +1,10 @@
 use anyhow::Result;
 use camino::Utf8PathBuf;
-use cargo_xcframework::ext::PathBufExt;
 use clap::Parser;
 use std::process::Command;
 use swift_package::SpmCli;
 use tempfile::{tempdir, TempDir};
+use xcframework::ext::PathBufExt;
 
 #[test]
 fn end_to_end_static() {

@@ -3,7 +3,7 @@ use crate::SpmCli;
 use anyhow::Result;
 use camino::Utf8PathBuf;
 use cargo_metadata::MetadataCommand;
-use cargo_xcframework::XCFrameworkConfiguration;
+use xcframework::XCFrameworkConfiguration;
 
 #[derive(Debug)]
 pub struct Configuration {

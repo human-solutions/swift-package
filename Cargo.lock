@@ -72,43 +72,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "swift-package"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "camino",
- "cargo-xcframework",
- "cargo_metadata",
- "clap",
- "fs-err",
- "fs_extra",
- "serde",
- "serde_json",
- "tempfile",
- "yansi",
-]
-
-[[package]]
-name = "cargo-xcframework"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "camino",
- "cargo_metadata",
- "clap",
- "dialoguer",
- "fs-err",
- "fs_extra",
- "lazy_static",
- "rustup-configurator",
- "serde",
- "serde_json",
- "target-lexicon",
- "yansi",
- "zip-extensions",
-]
-
-[[package]]
 name = "cargo_metadata"
 version = "0.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -589,6 +552,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
+name = "swift-package"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "anyhow",
+ "camino",
+ "cargo_metadata",
+ "clap",
+ "fs-err",
+ "fs_extra",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "xcframework",
+ "yansi",
+]
+
+[[package]]
 name = "syn"
 version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -824,6 +804,28 @@ name = "windows_x86_64_msvc"
 version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "447660ad36a13288b1db4d4248e857b510e8c3a225c822ba4fb748c0aafecffd"
+
+[[package]]
+name = "xcframework"
+version = "0.1.0-alpha.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "156540b2dd45518e8b88e6ddacd12851ac7e4ab3516bb58bebf9be6cb5582ba5"
+dependencies = [
+ "anyhow",
+ "camino",
+ "cargo_metadata",
+ "clap",
+ "dialoguer",
+ "fs-err",
+ "fs_extra",
+ "lazy_static",
+ "rustup-configurator",
+ "serde",
+ "serde_json",
+ "target-lexicon",
+ "yansi",
+ "zip-extensions",
+]
 
 [[package]]
 name = "yansi"

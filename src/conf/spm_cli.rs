@@ -1,6 +1,6 @@
 use camino::Utf8PathBuf;
-use cargo_xcframework::XcCli;
 use clap::Parser;
+use xcframework::XcCli;
 
 /// Compile a package into a cross-platform Apple XCFramework
 #[derive(Debug, Parser)]

@@ -1,6 +1,6 @@
 use crate::conf::Configuration;
 use anyhow::Result;
-use cargo_xcframework::Produced;
+use xcframework::Produced;
 
 pub fn generate(conf: &Configuration, produced: &Produced) -> Result<()> {
     let module_name = &produced.module_name;

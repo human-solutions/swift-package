@@ -2,11 +2,11 @@ mod conf;
 mod swift_package_file;
 
 use anyhow::{Context, Result};
-use cargo_xcframework::ext::PathBufExt;
-use cargo_xcframework::Produced;
 use conf::Configuration;
 pub use conf::SpmCli;
 use fs_extra::dir::CopyOptions;
+use xcframework::ext::PathBufExt;
+use xcframework::Produced;
 
 pub fn build(cli: SpmCli) -> Result<()> {
     let conf = Configuration::load(cli)?;
@@ -14,7 +14,7 @@ pub fn build(cli: SpmCli) -> Result<()> {
     conf.build_dir.remove_dir_all_if_exists()?;
     fs_err::create_dir_all(&conf.build_dir)?;
 
-    let produced = cargo_xcframework::build(conf.cli.to_xc_cli())?;
+    let produced = xcframework::build(conf.cli.to_xc_cli())?;
 
     swift_package_file::generate(&conf, &produced)?;
 
