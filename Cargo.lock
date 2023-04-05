@@ -72,7 +72,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cargo-swift-package"
+name = "swift-package"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -98,6 +98,7 @@ dependencies = [
  "clap",
  "dialoguer",
  "fs-err",
+ "fs_extra",
  "lazy_static",
  "rustup-configurator",
  "serde",

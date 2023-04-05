@@ -1,7 +1,11 @@
 [package]
-name = "cargo-swift-package"
-version = "0.1.0"
+name = "swift-package"
+version = "0.1.0-alpha.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/human-solutions/swift-package"
+description = "Cargo plugin and library for building Apple Swift Packages"
+categories = ["development-tools::cargo-plugins", "development-tools::ffi"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
