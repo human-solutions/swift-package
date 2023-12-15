@@ -14,9 +14,9 @@ pub fn build(cli: SpmCli) -> Result<()> {
     conf.build_dir.remove_dir_all_if_exists()?;
     fs_err::create_dir_all(&conf.build_dir)?;
 
-    let produced = xcframework::build(conf.cli.to_xc_cli())?;
+    let produced = xcframework::build(conf.cli.to_xc_cli()).context("building with xcframework")?;
 
-    swift_package_file::generate(&conf, &produced)?;
+    swift_package_file::generate(&conf, &produced).context("generate swift package file")?;
 
     move_framework(&conf, &produced)?;
     copy_swift_file(&conf)?;
@@ -30,7 +30,7 @@ fn copy_swift_file(conf: &Configuration) -> Result<()> {
     to.create_dir_all_if_needed()?;
 
     let options = CopyOptions::new();
-    fs_extra::dir::copy(&from, &to, &options).context(format!(
+    fs_extra::dir::copy(from, &to, &options).context(format!(
         "Could not recursively copy the directory {from} to {to}"
     ))?;
     Ok(())
@@ -41,7 +41,7 @@ fn move_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
 
     fs_err::rename(
         &produced.path,
-        &conf.build_dir.join(produced.path.file_name().unwrap()),
+        conf.build_dir.join(produced.path.file_name().unwrap()),
     )?;
     Ok(())
 }
