@@ -44,7 +44,10 @@ fn end_to_end_static() {
     let stderr = String::from_utf8_lossy(&cmd.stderr);
     eprintln!("{stderr}");
     assert!(stderr.contains("Build complete!"));
-    assert_eq!("SwiftMath.swift_add(4 + 2) = 6\n", stdout);
+    assert_eq!(
+        "SwiftMath.swift_add(4 + 2) = 6; from resource file: hi there\n",
+        stdout
+    );
 }
 
 fn cp_swift_exe(dest: &Path) -> Result<Utf8PathBuf> {

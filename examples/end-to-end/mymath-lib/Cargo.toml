@@ -16,3 +16,4 @@ macOS = true
 [package.metadata.swift-package]
 package-name = "SwiftMath"
 swift-source-dir = "swift"
+resource-dirs = ["resources"]

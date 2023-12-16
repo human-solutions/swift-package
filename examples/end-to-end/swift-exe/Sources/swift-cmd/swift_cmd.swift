@@ -1,10 +1,12 @@
 import SwiftMath
+import Foundation
 
 @main
 public struct swift_cmd {
-    public private(set) var text = "Hello, World!"
 
     public static func main() {
-        print("SwiftMath.swift_add(4 + 2) = \(SwiftMath.swift_add(4, 2))")
+        let helloFile = SwiftMath.resources.appendingPathComponent("hello.txt")
+        let hello = try! String(contentsOf: helloFile)
+        print("SwiftMath.swift_add(4 + 2) = \(SwiftMath.swift_add(4, 2)); from resource file: \(hello)")
     }
 }

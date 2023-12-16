@@ -2,7 +2,7 @@ use crate::conf::Configuration;
 use anyhow::Result;
 use xcframework::Produced;
 
-pub fn generate(conf: &Configuration, produced: &Produced) -> Result<()> {
+pub fn generate(conf: &Configuration, produced: &Produced, resource_dirs: &[&str]) -> Result<()> {
     let module_name = &produced.module_name;
     let package_name = &conf.cargo_section.package_name;
 
@@ -11,6 +11,11 @@ pub fn generate(conf: &Configuration, produced: &Produced) -> Result<()> {
     } else {
         "xcframework"
     };
+    let resources = resource_dirs
+        .iter()
+        .map(|dir| format!(".copy(\"{dir}\")"))
+        .collect::<Vec<_>>()
+        .join(", ");
 
     let contents = format!(
         r###"// swift-tools-version:5.7.1
@@ -30,7 +35,8 @@ let package = Package(
     ),
     .target(
       name: "{package_name}",
-      dependencies: ["{module_name}"]
+      dependencies: ["{module_name}"],
+      resources: [{resources}]
     )
   ]
 )
