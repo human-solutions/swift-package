@@ -370,7 +370,6 @@ dependencies = [
  "tempfile",
  "xcframework",
  "xflags",
- "yansi",
 ]
 
 [[package]]
