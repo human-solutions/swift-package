@@ -1,6 +1,6 @@
 use camino::Utf8PathBuf;
 use clap::Parser;
-use xcframework::XcCli;
+use xcframework::CliArgs;
 
 /// Compile a package into a cross-platform Apple XCFramework
 #[derive(Debug, Parser)]
@@ -52,12 +52,12 @@ pub struct SpmCli {
 }
 
 impl SpmCli {
-    pub fn to_xc_cli(&self) -> XcCli {
-        XcCli {
+    pub fn to_xc_cli(&self) -> CliArgs {
+        CliArgs {
             lib_type: None,
             quiet: self.quiet,
             package: self.package.clone(),
-            verbose: self.verbose,
+            verbose: self.verbose as u32,
             unstable_flags: self.unstable_flags.clone(),
             release: self.release,
             profile: self.profile.clone(),
