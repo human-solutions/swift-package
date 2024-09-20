@@ -1,5 +1,4 @@
-use super::SwiftPackageConfiguration;
-use crate::SpmCli;
+use super::{CliArgs, SwiftPackageConfiguration};
 use anyhow::Result;
 use camino::Utf8PathBuf;
 use cargo_metadata::MetadataCommand;
@@ -11,7 +10,7 @@ pub struct Configuration {
     pub dir: Utf8PathBuf,
     pub name: String,
     pub cargo_section: SwiftPackageConfiguration,
-    pub cli: SpmCli,
+    pub cli: CliArgs,
     pub xcframework: XCFrameworkConfiguration,
     /// Directory for all generated artifacts
     pub target_dir: Utf8PathBuf,
@@ -20,7 +19,7 @@ pub struct Configuration {
 }
 
 impl Configuration {
-    pub fn load(cli: SpmCli) -> Result<Self> {
+    pub fn load(cli: CliArgs) -> Result<Self> {
         let manifest_path = cli
             .manifest_path
             .clone()
