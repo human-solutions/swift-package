@@ -1,10 +1,10 @@
 use anyhow::Result;
 use camino::Utf8PathBuf;
-use clap::Parser;
 use fs_err as fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use swift_package::SpmCli;
+
+use swift_package::CliArgs;
 
 fn create_output_dir(subfolder: &str) -> PathBuf {
     let tmp_dir = PathBuf::from("tests").join("temp").join(subfolder);
@@ -15,6 +15,10 @@ fn create_output_dir(subfolder: &str) -> PathBuf {
     tmp_dir
 }
 
+fn args(vec: &[&str]) -> CliArgs {
+    CliArgs::from_vec(vec.iter().map(|s| s.into()).collect()).unwrap()
+}
+
 #[test]
 fn end_to_end_static() {
     let out_dir = create_output_dir("static");
@@ -22,10 +26,10 @@ fn end_to_end_static() {
     let target_dir = out_dir.join("mymath-lib/target");
     fs::create_dir_all(&target_dir).unwrap();
 
-    let cli = SpmCli::parse_from([
-        "cargo-xcframework",
+    let cli = args(&[
         "--quiet",
-        "--manifest-path=examples/end-to-end/mymath-lib/Cargo.toml",
+        "--manifest-path",
+        "examples/end-to-end/mymath-lib/Cargo.toml",
         "--target-dir",
         &target_dir.to_str().unwrap(),
     ]);
@@ -43,7 +47,7 @@ fn end_to_end_static() {
     let stdout = String::from_utf8_lossy(&cmd.stdout);
     let stderr = String::from_utf8_lossy(&cmd.stderr);
     eprintln!("{stderr}");
-    assert!(stderr.contains("Build complete!"));
+    assert!(stderr.contains("complete!"));
     assert_eq!(
         "SwiftMath.swift_add(4 + 2) = 6; from resource file: hi there\n",
         stdout

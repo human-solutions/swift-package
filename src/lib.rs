@@ -4,13 +4,13 @@ mod swift_resources_ext;
 
 use anyhow::{anyhow, bail, Context, Result};
 use camino::Utf8Path;
+pub use conf::CliArgs;
 use conf::Configuration;
-pub use conf::SpmCli;
 use fs_extra::dir::CopyOptions;
 use xcframework::ext::PathBufExt;
 use xcframework::Produced;
 
-pub fn build(cli: SpmCli) -> Result<()> {
+pub fn build(cli: CliArgs) -> Result<()> {
     let conf = Configuration::load(cli)?;
 
     conf.build_dir.remove_dir_all_if_exists()?;

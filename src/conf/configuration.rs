@@ -1,26 +1,17 @@
-use super::SwiftPackageConfiguration;
-use crate::SpmCli;
+use super::{CliArgs, SwiftPackageConfiguration};
 use anyhow::Result;
 use camino::Utf8PathBuf;
 use cargo_metadata::MetadataCommand;
-use xcframework::XCFrameworkConfiguration;
 
 #[derive(Debug)]
 pub struct Configuration {
-    /// The root dir of the project
-    pub dir: Utf8PathBuf,
-    pub name: String,
     pub cargo_section: SwiftPackageConfiguration,
-    pub cli: SpmCli,
-    pub xcframework: XCFrameworkConfiguration,
-    /// Directory for all generated artifacts
-    pub target_dir: Utf8PathBuf,
-    /// Directory where the xcframework will be built
+    pub cli: CliArgs,
     pub build_dir: Utf8PathBuf,
 }
 
 impl Configuration {
-    pub fn load(cli: SpmCli) -> Result<Self> {
+    pub fn load(cli: CliArgs) -> Result<Self> {
         let manifest_path = cli
             .manifest_path
             .clone()
@@ -35,17 +26,12 @@ impl Configuration {
         let Some(package) = metadata.root_package() else {
             anyhow::bail!("Could not find root package in metadata");
         };
-        let xc_conf = XCFrameworkConfiguration::parse(&package.metadata, &dir)?;
         let sp_conf = SwiftPackageConfiguration::parse(&package.metadata, &dir)?;
 
         let build_dir = target_dir.join(format!("{}.package", sp_conf.package_name));
         Ok(Self {
-            dir,
-            name: "SwiftMath".to_string(),
             cargo_section: sp_conf,
-            xcframework: xc_conf,
             cli,
-            target_dir,
             build_dir,
         })
     }
