@@ -517,7 +517,9 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "xcframework"
-version = "0.1.0-alpha.5"
+version = "0.1.0-alpha.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4298315cda7b4d0f5dd3e648a37589754b38c0d92ddfa6fa88b165460f4a3346"
 dependencies = [
  "anyhow",
  "camino",
