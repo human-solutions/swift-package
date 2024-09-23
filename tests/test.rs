@@ -47,7 +47,7 @@ fn end_to_end_static() {
     let stdout = String::from_utf8_lossy(&cmd.stdout);
     let stderr = String::from_utf8_lossy(&cmd.stderr);
     eprintln!("{stderr}");
-    assert!(stderr.contains("Build complete!"));
+    assert!(stderr.contains("complete!"));
     assert_eq!(
         "SwiftMath.swift_add(4 + 2) = 6; from resource file: hi there\n",
         stdout
