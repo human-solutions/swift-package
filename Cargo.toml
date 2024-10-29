@@ -13,7 +13,7 @@ categories = ["development-tools::cargo-plugins", "development-tools::ffi"]
 anyhow = "1.0"
 cargo_metadata = { version = "0.18", features = ["builder"] }
 camino = "1.1"
-fs-err = "2.9"
+fs-err = "3.0"
 xcframework = "0.1.0-alpha.6"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
