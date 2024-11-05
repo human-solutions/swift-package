@@ -7,7 +7,7 @@ edition = "2021"
 
 [lib]
 name = "mymath"
-crate-type = ["staticlib"]
+crate-type = ["cdylib"]
 
 [package.metadata.xcframework]
 include-dir = "include"

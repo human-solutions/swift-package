@@ -1,6 +1,6 @@
 use crate::conf::Configuration;
 use anyhow::Result;
-use xcframework::ext::PathBufExt;
+use camino_fs::Utf8PathExt;
 
 pub fn generate(conf: &Configuration, resource_dirs: &[&str]) -> Result<()> {
     let package_name = &conf.cargo_section.package_name;
@@ -14,14 +14,14 @@ pub fn generate(conf: &Configuration, resource_dirs: &[&str]) -> Result<()> {
     let contents = format!(
         r###"import Foundation
 
-extension {package_name} {{ 
+extension {package_name} {{
 {resources}
 }}  "###,
     );
 
     let dir = conf.build_dir.join("Sources").join(package_name);
-    dir.create_dir_all_if_needed()?;
-    fs_err::write(dir.join("ResourcesExt.swift"), contents)?;
+    dir.mkdirs()?;
+    dir.join("ResourcesExt.swift").write(contents)?;
     Ok(())
 }
 

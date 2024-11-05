@@ -1,5 +1,5 @@
 use anyhow::{bail, Context, Result};
-use camino::{Utf8Path, Utf8PathBuf};
+use camino_fs::{Utf8Path, Utf8PathBuf};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Default)]

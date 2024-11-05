@@ -5,12 +5,12 @@ mod swift_package;
 pub use args::SwiftPackage as CliArgs;
 pub use configuration::Configuration;
 pub use swift_package::SwiftPackageConfiguration;
-use xcframework::CliArgs as XcCli;
+use xcframework::{CliArgs as XcCli, LibType};
 
 impl CliArgs {
     pub fn to_xc_cli(&self) -> XcCli {
         XcCli {
-            lib_type: None,
+            lib_type: Some(LibType::CDyLib),
             quiet: self.quiet,
             package: self.package.clone(),
             verbose: self.verbose as u32,

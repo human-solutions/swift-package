@@ -1,6 +1,6 @@
 use super::{CliArgs, SwiftPackageConfiguration};
-use anyhow::Result;
-use camino::Utf8PathBuf;
+use anyhow::{anyhow, Result};
+use camino_fs::Utf8PathBuf;
 use cargo_metadata::MetadataCommand;
 
 #[derive(Debug)]
@@ -23,9 +23,18 @@ impl Configuration {
 
         let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
 
-        let Some(package) = metadata.root_package() else {
-            anyhow::bail!("Could not find root package in metadata");
+        let package = if let Some(package) = &cli.package {
+            metadata
+                .workspace_packages()
+                .iter()
+                .find(|p| &p.name == package)
+                .ok_or(anyhow!("Could not find package '{package}'"))?
+        } else {
+            metadata
+                .root_package()
+                .ok_or(anyhow!("Could not find root package in metadata"))?
         };
+
         let sp_conf = SwiftPackageConfiguration::parse(&package.metadata, &dir)?;
 
         let build_dir = target_dir.join(format!("{}.package", sp_conf.package_name));

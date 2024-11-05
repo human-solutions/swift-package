@@ -3,18 +3,17 @@ mod swift_package_file;
 mod swift_resources_ext;
 
 use anyhow::{anyhow, bail, Context, Result};
-use camino::Utf8Path;
+use camino_fs::{Utf8Path, Utf8PathExt};
 pub use conf::CliArgs;
 use conf::Configuration;
 use fs_extra::dir::CopyOptions;
-use xcframework::ext::PathBufExt;
 use xcframework::Produced;
 
 pub fn build(cli: CliArgs) -> Result<()> {
     let conf = Configuration::load(cli)?;
 
-    conf.build_dir.remove_dir_all_if_exists()?;
-    fs_err::create_dir_all(&conf.build_dir)?;
+    conf.build_dir.rm()?;
+    conf.build_dir.mkdirs()?;
 
     let produced = xcframework::build(conf.cli.to_xc_cli()).context("building with xcframework")?;
 
@@ -58,17 +57,16 @@ fn copy_swift_sources(conf: &Configuration) -> Result<()> {
 }
 
 fn move_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
-    conf.build_dir.create_dir_all_if_needed()?;
+    conf.build_dir.mkdirs()?;
 
-    fs_err::rename(
-        &produced.path,
-        conf.build_dir.join(produced.path.file_name().unwrap()),
-    )?;
+    produced
+        .path
+        .mv(conf.build_dir.join(produced.path.file_name().unwrap()))?;
     Ok(())
 }
 
 pub fn copy_dir(from: &Utf8Path, to: &Utf8Path) -> Result<()> {
-    to.to_path_buf().create_dir_all_if_needed()?;
+    to.mkdirs()?;
 
     fs_extra::dir::copy(from, to, &CopyOptions::new()).context(format!(
         "Could not recursively copy the directory {from} to {to}"

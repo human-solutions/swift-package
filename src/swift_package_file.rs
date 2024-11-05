@@ -1,5 +1,6 @@
 use crate::conf::Configuration;
 use anyhow::Result;
+use camino_fs::Utf8PathExt;
 use xcframework::Produced;
 
 pub fn generate(conf: &Configuration, produced: &Produced, resource_dirs: &[&str]) -> Result<()> {
@@ -42,6 +43,6 @@ let package = Package(
 )
   "###,
     );
-    fs_err::write(conf.build_dir.join("Package.swift"), contents)?;
+    conf.build_dir.join("Package.swift").write(contents)?;
     Ok(())
 }
