@@ -1,0 +1,19 @@
+[package]
+name = "rust-lib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "rusty"
+
+[[bin]]
+# This can be whatever name makes sense for your project, but the rest of this tutorial assumes uniffi-bindgen.
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"
+
+[dependencies]
+uniffi = "0.28"
+
+[build-dependencies]
+uniffi = { version = "0.28", features = ["build"] }
