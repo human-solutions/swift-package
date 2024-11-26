@@ -1,7 +1,9 @@
+use crate::SWIFT_PACKAGE_UNIFFY_VERSION;
+
 use super::{CliArgs, SwiftPackageConfiguration};
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Result};
 use camino_fs::Utf8PathBuf;
-use cargo_metadata::MetadataCommand;
+use cargo_metadata::{Metadata, MetadataCommand};
 
 #[derive(Debug)]
 pub struct Configuration {
@@ -22,6 +24,7 @@ impl Configuration {
         let target_dir = cli.target_dir.clone().unwrap_or_else(|| dir.join("target"));
 
         let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
+        uniffi_version_check(&metadata)?;
 
         let package = if let Some(package) = &cli.package {
             metadata
@@ -44,4 +47,32 @@ impl Configuration {
             build_dir,
         })
     }
+}
+
+fn uniffi_version_check(metadata: &Metadata) -> Result<()> {
+    let uniffi_bindgen_version = metadata
+        .packages
+        .iter()
+        .find(|pack| pack.name == "uniffi_bindgen")
+        .unwrap()
+        .version
+        .to_string();
+
+    let expected = major_and_minor(SWIFT_PACKAGE_UNIFFY_VERSION);
+    let found = major_and_minor(&uniffi_bindgen_version);
+    if expected != found {
+        bail!(
+            "uniffi_bindgen version mismatch: \
+            swift-package is build with {SWIFT_PACKAGE_UNIFFY_VERSION} \
+            but the project uses {uniffi_bindgen_version}"
+        );
+    }
+    Ok(())
+}
+
+fn major_and_minor(semver: &str) -> String {
+    let mut parts = semver.split('.');
+    let major = parts.next().unwrap();
+    let minor = parts.next().unwrap();
+    format!("{}.{}", major, minor)
 }

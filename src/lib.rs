@@ -9,6 +9,8 @@ use conf::Configuration;
 use fs_extra::dir::CopyOptions;
 use xcframework::Produced;
 
+const SWIFT_PACKAGE_UNIFFY_VERSION: &str = env!("UNIFFY_BINDGEN_VERSION");
+
 pub fn build(cli: CliArgs) -> Result<()> {
     let conf = Configuration::load(cli)?;
 
@@ -18,7 +20,9 @@ pub fn build(cli: CliArgs) -> Result<()> {
     let produced = xcframework::build(conf.cli.to_xc_cli()).context("building with xcframework")?;
 
     let resource_dirs = copy_resources(&conf)?;
-    swift_resources_ext::generate(&conf, &resource_dirs)?;
+    if !resource_dirs.is_empty() {
+        swift_resources_ext::generate(&conf, &resource_dirs)?;
+    }
     swift_package_file::generate(&conf, &produced, &resource_dirs)
         .context("generate swift package file")?;
 
@@ -47,13 +51,19 @@ fn copy_resources(conf: &Configuration) -> Result<Vec<&str>> {
 }
 
 fn copy_swift_sources(conf: &Configuration) -> Result<()> {
-    let from = &conf.cargo_section.swift_source_dir;
     let to = conf
         .build_dir
         .join("Sources")
         .join(&conf.cargo_section.package_name);
+    to.mkdirs()?;
+    let from = &conf.cargo_section.swift_source_dir;
 
-    copy_dir(from, &to)
+    from.ls()
+        .files()
+        .relative_paths()
+        .filter(|f| f.extension() == Some("swift"))
+        .try_for_each(|f| from.join(&f).cp(to.join(f)))?;
+    Ok(())
 }
 
 fn move_framework(conf: &Configuration, produced: &Produced) -> Result<()> {
