@@ -19,7 +19,7 @@ extension {package_name} {{
 }}  "###,
     );
 
-    let dir = conf.build_dir.join("Sources").join(package_name);
+    let dir = conf.framework_build_dir.join("Sources").join(package_name);
     dir.mkdirs()?;
     dir.join("ResourcesExt.swift").write(contents)?;
     Ok(())

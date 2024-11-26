@@ -9,11 +9,15 @@ edition = "2021"
 name = "mymath"
 crate-type = ["cdylib"]
 
+[dependencies]
+uniffi = "0.28"
+
 [package.metadata.xcframework]
 include-dir = "include"
 macOS = true
 
 [package.metadata.swift-package]
 package-name = "SwiftMath"
+udl-file = "src/mymath.udl"
 swift-source-dir = "swift"
 resource-dirs = ["resources"]
