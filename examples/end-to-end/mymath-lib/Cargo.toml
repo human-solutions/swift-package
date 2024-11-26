@@ -12,12 +12,11 @@ crate-type = ["cdylib"]
 [dependencies]
 uniffi = "0.28"
 
-[package.metadata.xcframework]
-include-dir = "include"
-macOS = true
+[build-dependencies]
+uniffi = { version = "0.28", features = ["build"] }
 
 [package.metadata.swift-package]
+macOS = true
 package-name = "SwiftMath"
 udl-file = "src/mymath.udl"
-swift-source-dir = "swift"
-resource-dirs = ["resources"]
+# resource-dirs = ["resources"]

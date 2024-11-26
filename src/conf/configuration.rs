@@ -1,14 +1,16 @@
 use crate::SWIFT_PACKAGE_UNIFFY_VERSION;
 
 use super::{CliArgs, SwiftPackageConfiguration};
-use anyhow::{anyhow, bail, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use camino_fs::Utf8PathBuf;
 use cargo_metadata::{Metadata, MetadataCommand, Package};
+use xcframework::{Configuration as XCMainConfig, XCFrameworkConfiguration};
 
 #[derive(Debug)]
 pub struct Configuration {
     pub target_name: String,
     pub cargo_section: SwiftPackageConfiguration,
+    pub xcframework: XCMainConfig,
     pub cli: CliArgs,
 
     /// When in a workspace configuration, this is different
@@ -49,18 +51,33 @@ impl Configuration {
         let package_dir = package.manifest_path.parent().unwrap();
 
         uniffi_version_check(&package, &metadata)?;
+        let Some(section) = package.metadata.get("swift-package") else {
+            bail!("Missing '[package.metadata.swift-package]' section in Cargo.toml")
+        };
+        let sp_conf = SwiftPackageConfiguration::parse(&section, &package_dir).context(
+            "Error when creating swift package configuration by parsing \
+                Cargo.toml section [package.metadata.swift-package]",
+        )?;
         let target_name = find_target_name(&package)?;
-
-        let sp_conf = SwiftPackageConfiguration::parse(&package.metadata, &package_dir)?;
-
         let build_dir = target_dir.join(format!("lib{target_name}"));
-        let framework_build_dir = build_dir.join(format!("{target_name}.package"));
+        let framework_build_dir = build_dir.join(format!("{}.package", sp_conf.package_name));
+        let bindings_build_dir = build_dir.join("bindings");
+
+        let mut xc_conf = XCFrameworkConfiguration::parse(&section, &package_dir, false).context(
+            "Error when creating xcframework configuration by parsing \
+                Cargo.toml section [package.metadata.swift-package]",
+        )?;
+        xc_conf.include_dir = bindings_build_dir.clone();
+        let xc_cli = cli.to_xc_cli();
+        let xcframework = XCMainConfig::new(&metadata, package, xc_cli, xc_conf)?;
+
         Ok(Self {
             cargo_section: sp_conf,
+            xcframework,
             cli,
             manifest_dir,
             framework_build_dir,
-            bindings_build_dir: build_dir.join("bindings"),
+            bindings_build_dir,
             target_name,
             target_dir,
         })

@@ -39,7 +39,7 @@ pub fn build(cli: CliArgs) -> Result<()> {
         return Ok(());
     }
 
-    let produced = xcframework::build(conf.cli.to_xc_cli()).context("building with xcframework")?;
+    let produced = xcframework::build(&conf.xcframework).context("building with xcframework")?;
 
     let resource_dirs = copy_resources(&conf)?;
     if !resource_dirs.is_empty() {
@@ -78,7 +78,7 @@ fn copy_swift_sources(conf: &Configuration) -> Result<()> {
         .join("Sources")
         .join(&conf.cargo_section.package_name);
     to.mkdirs()?;
-    let from = &conf.cargo_section.swift_source_dir;
+    let from = &conf.bindings_build_dir;
 
     from.ls()
         .files()
