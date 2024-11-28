@@ -1,0 +1,27 @@
+[workspace]
+
+[package]
+name = "hello"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = [
+    "staticlib", # must for iOS
+    "rlib",
+    "cdylib",    # must for Android
+]
+# staticlib would be good enough.
+# adding "rlib" here just in case that we need to call these public interfaces directly from another Rust crate
+name = "greeter"
+
+[[bin]]
+# This can be whatever name makes sense for your project, but the rest of this tutorial assumes uniffi-bindgen.
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"
+
+[dependencies]
+uniffi = "0.27"
+
+[build-dependencies]
+uniffi = { version = "0.28", features = ["build"] }

@@ -144,6 +144,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "hello"
+version = "0.1.0"
+dependencies = [
+ "uniffi 0.27.3",
+ "uniffi 0.28.3",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -182,13 +190,6 @@ name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
-
-[[package]]
-name = "mymath-lib"
-version = "0.1.0"
-dependencies = [
- "uniffi",
-]
 
 [[package]]
 name = "nom"
@@ -384,6 +385,17 @@ checksum = "adb9e6ca4f869e1180728b7950e35922a7fc6397f7b641499e8f3ef06e50dc83"
 
 [[package]]
 name = "uniffi"
+version = "0.27.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb3a4c447c50fcda7bc5604a8588b7e1f37ffbfd8838a1516a290398efa7c6f0"
+dependencies = [
+ "anyhow",
+ "uniffi_core 0.27.3",
+ "uniffi_macros 0.27.3",
+]
+
+[[package]]
+name = "uniffi"
 version = "0.28.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4cb08c58c7ed7033150132febe696bef553f891b1ede57424b40d87a89e3c170"
@@ -392,8 +404,8 @@ dependencies = [
  "cargo_metadata",
  "uniffi_bindgen",
  "uniffi_build",
- "uniffi_core",
- "uniffi_macros",
+ "uniffi_core 0.28.3",
+ "uniffi_macros 0.28.3",
 ]
 
 [[package]]
@@ -415,7 +427,7 @@ dependencies = [
  "serde",
  "textwrap",
  "toml",
- "uniffi_meta",
+ "uniffi_meta 0.28.3",
  "uniffi_udl",
 ]
 
@@ -432,12 +444,37 @@ dependencies = [
 
 [[package]]
 name = "uniffi_checksum_derive"
+version = "0.27.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d5c400339a9d1d17be34257d0b407e91d64af335e5b4fa49f4bf28467fc8d635"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "uniffi_checksum_derive"
 version = "0.28.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "802d2051a700e3ec894c79f80d2705b69d85844dafbbe5d1a92776f8f48b563a"
 dependencies = [
  "quote",
  "syn",
+]
+
+[[package]]
+name = "uniffi_core"
+version = "0.27.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a02e67ac9634b10da9e4aa63a29a7920b8f1395eafef1ea659b2dd76dda96906"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "camino",
+ "log",
+ "once_cell",
+ "paste",
+ "static_assertions",
 ]
 
 [[package]]
@@ -456,6 +493,24 @@ dependencies = [
 
 [[package]]
 name = "uniffi_macros"
+version = "0.27.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6f08d5592c669b80a8af5066027098bebec4b4af17a9b8b299bac5f518ab89e"
+dependencies = [
+ "bincode",
+ "camino",
+ "fs-err",
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn",
+ "toml",
+ "uniffi_meta 0.27.3",
+]
+
+[[package]]
+name = "uniffi_macros"
 version = "0.28.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12c65a5b12ec544ef136693af8759fb9d11aefce740fb76916721e876639033b"
@@ -469,7 +524,19 @@ dependencies = [
  "serde",
  "syn",
  "toml",
- "uniffi_meta",
+ "uniffi_meta 0.28.3",
+]
+
+[[package]]
+name = "uniffi_meta"
+version = "0.27.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "583bab49f2bdf5681f9732f8b67a7e555ad920dbb5427be21450217bf1818189"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "siphasher",
+ "uniffi_checksum_derive 0.27.3",
 ]
 
 [[package]]
@@ -481,7 +548,7 @@ dependencies = [
  "anyhow",
  "bytes",
  "siphasher",
- "uniffi_checksum_derive",
+ "uniffi_checksum_derive 0.28.3",
 ]
 
 [[package]]
@@ -505,7 +572,7 @@ checksum = "037820a4cfc4422db1eaa82f291a3863c92c7d1789dc513489c36223f9b4cdfc"
 dependencies = [
  "anyhow",
  "textwrap",
- "uniffi_meta",
+ "uniffi_meta 0.28.3",
  "uniffi_testing",
  "weedle2",
 ]

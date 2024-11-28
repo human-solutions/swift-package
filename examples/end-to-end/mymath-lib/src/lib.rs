@@ -1,5 +1,7 @@
-#[no_mangle]
-pub extern "C" fn rust_add(left: i32, right: i32) -> i32 {
+uniffi::include_scaffolding!("mymath");
+
+// #[uniffi::export]
+pub fn rust_add(left: u32, right: u32) -> u32 {
     left + right
 }
 

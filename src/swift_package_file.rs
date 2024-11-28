@@ -43,6 +43,8 @@ let package = Package(
 )
   "###,
     );
-    conf.build_dir.join("Package.swift").write(contents)?;
+    conf.framework_build_dir
+        .join("Package.swift")
+        .write(contents)?;
     Ok(())
 }
