@@ -19,4 +19,4 @@ uniffi = { version = "0.28", features = ["build"] }
 macOS = true
 package-name = "SwiftMath"
 udl-file = "src/mymath.udl"
-# resource-dirs = ["resources"]
+resource-dirs = ["resources"]

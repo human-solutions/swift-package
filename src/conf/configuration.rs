@@ -3,7 +3,7 @@ use crate::SWIFT_PACKAGE_UNIFFY_VERSION;
 use super::{CliArgs, SwiftPackageConfiguration};
 use anyhow::{anyhow, bail, Context, Result};
 use camino_fs::Utf8PathBuf;
-use cargo_metadata::{Metadata, MetadataCommand, Package};
+use cargo_metadata::{Metadata, MetadataCommand, Package, TargetKind};
 use xcframework::{Configuration as XCMainConfig, XCFrameworkConfiguration};
 
 #[derive(Debug)]
@@ -30,12 +30,12 @@ impl Configuration {
         let mut manifest_dir = manifest_path.clone();
         manifest_dir.pop();
 
+        let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
+
         let target_dir = cli
             .target_dir
             .clone()
-            .unwrap_or_else(|| manifest_dir.join("target"));
-
-        let metadata = MetadataCommand::new().manifest_path(manifest_path).exec()?;
+            .unwrap_or_else(|| metadata.target_directory.clone());
 
         let package = if let Some(package) = &cli.package {
             metadata
@@ -95,7 +95,7 @@ fn find_target_name(package: &Package) -> Result<String> {
     let target = package
         .targets
         .iter()
-        .find(|t| t.kind.iter().any(|k| k == "cdylib"))
+        .find(|t| t.kind.iter().any(|k| *k == TargetKind::CDyLib))
         .ok_or(anyhow!(
             "Could not find a cdylib target in package {}",
             package.name

@@ -5,14 +5,16 @@ mod swift_resources_ext;
 
 use anyhow::{anyhow, bail, Context, Result};
 use camino_fs::{Utf8Path, Utf8PathExt};
-pub use conf::CliArgs;
-use conf::Configuration;
+pub use conf::{CliArgs, Configuration, SwiftPackageConfiguration};
 use fs_extra::dir::CopyOptions;
 use log::LevelFilter;
 use simplelog::{
     format_description, ColorChoice, Config as LogConfig, ConfigBuilder, TermLogger, TerminalMode,
 };
 use xcframework::Produced;
+pub use xcframework::{
+    CliArgs as XCCliArgs, Configuration as XCConfig, LibType, XCFrameworkConfiguration,
+};
 
 const SWIFT_PACKAGE_UNIFFY_VERSION: &str = env!("UNIFFY_BINDGEN_VERSION");
 
@@ -25,19 +27,18 @@ use std::env;
 #[cfg(test)]
 use std::{println as info, println as warn, println as debug}; // Workaround to use prinltn! for logs.
 
-pub fn build(cli: CliArgs) -> Result<()> {
+pub fn build_cli(cli: CliArgs) -> Result<()> {
     setup_logging(cli.verbose);
     let conf = Configuration::load(cli)?;
+    build(conf)
+}
 
+pub fn build(conf: Configuration) -> Result<()> {
     conf.framework_build_dir.rm()?;
     conf.framework_build_dir.mkdirs()?;
 
     info!("generating bindings...");
     bindings::generate(&conf).context("generating bindings")?;
-
-    if false {
-        return Ok(());
-    }
 
     let produced = xcframework::build(&conf.xcframework).context("building with xcframework")?;
 
@@ -50,9 +51,9 @@ pub fn build(cli: CliArgs) -> Result<()> {
 
     move_framework(&conf, &produced)?;
     copy_swift_sources(&conf)?;
-
     Ok(())
 }
+
 fn copy_resources(conf: &Configuration) -> Result<Vec<&str>> {
     let mut names = vec![];
     for dir in &conf.cargo_section.resource_dirs {

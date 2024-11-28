@@ -30,7 +30,7 @@ fn end_to_end_static() {
         &target_dir.as_str(),
     ]);
 
-    swift_package::build(cli).unwrap();
+    swift_package::build_cli(cli).unwrap();
 
     let swift_dir = cp_swift_exe(&out_dir).unwrap();
 
