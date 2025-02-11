@@ -19,7 +19,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 simplelog = "0.12"
 time = "0.3"
-uniffi_bindgen = "0.28"
+uniffi_bindgen = "0.29"
 xcframework = "0.1.0"
 # xcframework = { path = "../xcframework" }
 xflags = "0.3"
