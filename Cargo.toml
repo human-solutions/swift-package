@@ -25,7 +25,7 @@ xcframework = "0.1.0"
 xflags = "0.3"
 
 [dev-dependencies]
-tempfile = "3.19"
+tempfile = "3.20"
 
 [build-dependencies]
 cargo_metadata = "0.19"
