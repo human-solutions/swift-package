@@ -12,7 +12,7 @@ categories = ["development-tools::cargo-plugins", "development-tools::ffi"]
 [dependencies]
 anyhow = "1.0"
 camino-fs = "0.1.3"
-cargo_metadata = "0.19"
+cargo_metadata = "0.20"
 fs_extra = "1.3.0"
 log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
@@ -25,7 +25,7 @@ xcframework = "0.1.0"
 xflags = "0.3"
 
 [dev-dependencies]
-tempfile = "3.19"
+tempfile = "3.20"
 
 [build-dependencies]
-cargo_metadata = "0.19"
+cargo_metadata = "0.20"
