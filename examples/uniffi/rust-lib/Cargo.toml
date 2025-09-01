@@ -1,7 +1,7 @@
 [package]
 name = "rust-lib"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [lib]
 crate-type = ["cdylib", "lib"]
@@ -13,7 +13,7 @@ name = "uniffi-bindgen"
 path = "uniffi-bindgen.rs"
 
 [dependencies]
-uniffi = "0.28"
+uniffi = "0.29"
 
 [build-dependencies]
-uniffi = { version = "0.28", features = ["build"] }
+uniffi = { version = "0.29", features = ["build"] }

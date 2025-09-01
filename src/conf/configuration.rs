@@ -37,9 +37,9 @@ impl Configuration {
             .clone()
             .unwrap_or_else(|| metadata.target_directory.clone());
 
+        let workspace_packages = metadata.workspace_packages();
         let package = if let Some(package) = &cli.package {
-            metadata
-                .workspace_packages()
+            workspace_packages
                 .iter()
                 .find(|p| &p.name == package)
                 .ok_or(anyhow!("Could not find package '{package}'"))?
