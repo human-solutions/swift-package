@@ -3,7 +3,7 @@ fn main() {
     let uniffi_bindgen_version = metadata
         .packages
         .iter()
-        .find(|pack| pack.name == "uniffi_bindgen")
+        .find(|pack| pack.name.as_str() == "uniffi_bindgen")
         .unwrap()
         .version
         .to_string();
