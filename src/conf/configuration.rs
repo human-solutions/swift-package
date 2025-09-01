@@ -1,7 +1,7 @@
 use crate::SWIFT_PACKAGE_UNIFFY_VERSION;
 
 use super::{CliArgs, SwiftPackageConfiguration};
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use camino_fs::Utf8PathBuf;
 use cargo_metadata::{Metadata, MetadataCommand, Package, TargetKind};
 use xcframework::{Configuration as XCMainConfig, XCFrameworkConfiguration};
@@ -37,11 +37,11 @@ impl Configuration {
             .clone()
             .unwrap_or_else(|| metadata.target_directory.clone());
 
+        let workspace_packages = metadata.workspace_packages();
         let package = if let Some(package) = &cli.package {
-            metadata
-                .workspace_packages()
+            workspace_packages
                 .iter()
-                .find(|p| &p.name == package)
+                .find(|p| &p.name.as_str() == package)
                 .ok_or(anyhow!("Could not find package '{package}'"))?
         } else {
             metadata
@@ -115,7 +115,7 @@ fn uniffi_version_check(package: &Package, metadata: &Metadata) -> Result<()> {
     let uniffi_bindgen_version = metadata
         .packages
         .iter()
-        .find(|pack| pack.name == "uniffi")
+        .find(|pack| pack.name.as_str() == "uniffi")
         .unwrap()
         .version
         .to_string();
